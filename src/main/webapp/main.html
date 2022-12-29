@@ -6,15 +6,30 @@
     <script type="text/javascript" src="jquery-3.6.3.js"></script>
     <script>
         $(document).ready(function(){
-            console.log($("#Ipt").val())
             $("#SearchBtn").click(function(){
-                $.post("SearchServlet",
-                    {
-                        keyword:$("#Ipt").val()
-                    },
-                    function(data,status){
-                        console.log(data+",,,"+status);
-                    });
+                $.post("SearchServlet", {
+                        Ipt:$("#Ipt").val()
+                        },
+                        function(data,status){
+                            var obj=JSON.parse(data);
+                            var table="";
+                            table +="<table border='1'>";
+                            for (var s1 in obj.students){
+                                var s=obj.students[s1];
+                                table+="<tr>"+
+                                    "<td>"+s.stuno+"</td>"+
+                                    "<td>"+s.stuname+"</td>"+
+                                    "<td>"+s.stuschool+"</td>"+
+                                    "<td>"+s.stumajor+"</td>"+
+                                    "<td>"+s.startdate+"</td>"+
+                                    "<td>"+s.enddate+"</td>"+
+                                    "<td>"+s.symptom+"</td>"+
+                                    "<td><a href='DeleteServlet?stuid="+s.stuid+"'>删除</a></td>"+
+                                    "</tr>";
+                            }
+                            table +="</table>";
+                            $("#result").html(table);
+                        });
             });
         });
     </script>
@@ -24,6 +39,7 @@
 学号或姓名
 <input type="text" id="Ipt">
 <input type="button" id ="SearchBtn" name="SearchBtn" value="搜索"><br>
-
+<div id="result">
+</div>
 </body>
 </html>
